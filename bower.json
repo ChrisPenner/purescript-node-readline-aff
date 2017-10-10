@@ -1,5 +1,5 @@
 {
-  "name": "node-readline-aff",
+  "name": "purescript-node-readline-aff",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -16,6 +16,8 @@
     "purescript-aff": "^4.0.0",
     "purescript-node-streams": "^3.1.0",
     "purescript-options": "^3.0.0",
-    "purescript-exceptions": "^3.1.0"
+    "purescript-exceptions": "^3.1.0",
+    "purescript-either": "^3.1.0",
+    "purescript-transformers": "^3.4.0"
   }
 }
