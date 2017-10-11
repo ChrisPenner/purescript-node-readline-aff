@@ -60,8 +60,8 @@ setPrompt
   => String
   -> RL.Interface
   -> m Unit
-setPrompt prompt interface =
-  liftEff $ RL.setPrompt prompt (length prompt) interface
+setPrompt promptText interface =
+  liftEff $ RL.setPrompt promptText (length promptText) interface
 
 -- | Read a single line from input using the current prompt.
 prompt 
