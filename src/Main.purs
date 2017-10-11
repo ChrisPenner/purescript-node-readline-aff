@@ -3,21 +3,23 @@ module Main where
 import Control.Monad.Aff (runAff_)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Control.Monad.Eff.Console (CONSOLE, error, log)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Reader (runReaderT)
+import Data.Either (either)
 import Data.Maybe (Maybe(..))
 import Data.String (uncons)
 import Node.ReadLine (READLINE, createConsoleInterface, noCompletion)
-import Node.ReadLine.Aff (question, readLine)
-import Prelude (Unit, bind, const, discard, pure, unit, ($), (<<<), (<>))
+import Node.ReadLine.Aff (question, readLine, setPrompt)
+import Prelude (Unit, bind, discard, show, ($), (<<<), (<>))
 
 main :: forall e. Eff (console :: CONSOLE, readline :: READLINE, exception :: EXCEPTION | e) Unit
 main = do
   interface <- createConsoleInterface noCompletion 
-  runAff_ (const $ pure unit) (runReaderT loop interface)
+  runAff_ (either (error <<< show) log) (runReaderT loop interface)
   where
     loop = do
+      setPrompt "$ "
       dog <- question "What's your dog's name?\n"
       liftEff <<< log $ "Can I pet " <> dog <> "?"
       str <- readLine
