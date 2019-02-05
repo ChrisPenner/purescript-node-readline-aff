@@ -4,8 +4,8 @@
 -- |
 -- | ```
 -- | import Node.ReadLine (close) as RL
--- | import Node.ReadLine.Aff (question, setPrompt, prompt, READLINE, createConsoleInterface, noCompletion)
--- | main :: forall e. Eff (console :: CONSOLE, readline :: READLINE, exception :: EXCEPTION | e) Unit
+-- | import Node.ReadLine.Aff (question, setPrompt, prompt, createConsoleInterface, noCompletion)
+-- | main :: forall e. Eff Unit
 -- | main = do
 -- |   interface <- createConsoleInterface noCompletion 
 -- |   runAff_ (either 
