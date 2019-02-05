@@ -31,20 +31,20 @@ module Node.ReadLine.Aff
   , module RLExports
   ) where
 
-import Control.Monad.Aff
+import Effect.Aff
 
-import Control.Monad.Aff.Class (class MonadAff, liftAff)
-import Control.Monad.Eff.Class (class MonadEff, liftEff)
+import Effect.Aff.Class (class MonadAff, liftAff)
+import Effect.Class (liftEffect, class MonadEffect)
 import Data.Either (Either(..))
 import Data.String (length)
-import Node.ReadLine (output, completer, terminal, historySize, noCompletion, createInterface, createConsoleInterface, Completer, Interface, InterfaceOptions, READLINE) as RLExports
+import Node.ReadLine (output, completer, terminal, historySize, noCompletion, createInterface, createConsoleInterface, Completer, Interface, InterfaceOptions) as RLExports
 import Node.ReadLine as RL
 import Prelude (Unit, discard, pure, ($), ($>), (<<<))
 
 -- | Writes a query to the output and returns the response
 question
   :: forall eff m
-   . MonadAff (readline :: RL.READLINE | eff) m
+   . MonadAff m
   => String
   -> RL.Interface
   -> m String
@@ -56,17 +56,17 @@ question q interface = do
 -- | Set the prompt, this is displayed for future `prompt` calls.
 setPrompt
   :: forall eff m
-  . MonadEff (readline :: RL.READLINE | eff) m
+  . MonadEffect m
   => String
   -> RL.Interface
   -> m Unit
 setPrompt promptText interface =
-  liftEff $ RL.setPrompt promptText (length promptText) interface
+  liftEffect $ RL.setPrompt promptText (length promptText) interface
 
 -- | Read a single line from input using the current prompt.
 prompt 
   :: forall eff m
-  . MonadAff (readline :: RL.READLINE | eff) m 
+  . MonadAff m 
   => RL.Interface
   -> m String
 prompt interface = do
@@ -80,7 +80,7 @@ prompt interface = do
 -- | Close the specified Interface. This should upon error, or when you're done reading input.
 close
   :: forall eff m
-  . MonadEff (readline :: RL.READLINE | eff) m 
+  . MonadEffect m 
   => RL.Interface
   -> m Unit
-close interface = liftEff (RL.close interface)
+close interface = liftEffect (RL.close interface)
