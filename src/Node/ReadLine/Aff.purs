@@ -43,7 +43,7 @@ import Prelude (Unit, discard, pure, ($), ($>), (<<<))
 
 -- | Writes a query to the output and returns the response
 question
-  :: forall eff m
+  :: forall m
    . MonadAff m
   => String
   -> RL.Interface
@@ -55,7 +55,7 @@ question q interface = do
 
 -- | Set the prompt, this is displayed for future `prompt` calls.
 setPrompt
-  :: forall eff m
+  :: forall m
   . MonadEffect m
   => String
   -> RL.Interface
@@ -65,7 +65,7 @@ setPrompt promptText interface =
 
 -- | Read a single line from input using the current prompt.
 prompt 
-  :: forall eff m
+  :: forall m
   . MonadAff m 
   => RL.Interface
   -> m String
@@ -79,7 +79,7 @@ prompt interface = do
 
 -- | Close the specified Interface. This should upon error, or when you're done reading input.
 close
-  :: forall eff m
+  :: forall m
   . MonadEffect m 
   => RL.Interface
   -> m Unit
