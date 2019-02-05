@@ -5,7 +5,7 @@
 -- | ```
 -- | import Node.ReadLine (close) as RL
 -- | import Node.ReadLine.Aff (question, setPrompt, prompt, createConsoleInterface, noCompletion)
--- | main :: forall e. Eff Unit
+-- | main :: Effect Unit
 -- | main = do
 -- |   interface <- createConsoleInterface noCompletion 
 -- |   runAff_ (either 
