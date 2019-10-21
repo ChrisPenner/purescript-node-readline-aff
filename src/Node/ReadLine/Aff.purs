@@ -1,5 +1,5 @@
 -- | This module provides an interface in Aff to Node.ReadLine
--- | 
+-- |
 -- | Example usage:
 -- |
 -- | ```
@@ -7,13 +7,13 @@
 -- | import Node.ReadLine.Aff (question, setPrompt, prompt, createConsoleInterface, noCompletion)
 -- | main :: Effect Unit
 -- | main = do
--- |   interface <- createConsoleInterface noCompletion 
--- |   runAff_ (either 
--- |             (\err -> showError err *> RL.close interface) 
--- |             (const $ RL.close interface)) 
+-- |   interface <- createConsoleInterface noCompletion
+-- |   runAff_ (either
+-- |             (\err -> showError err *> RL.close interface)
+-- |             (const $ RL.close interface))
 -- |           (loop interface)
 -- |   where
--- |     showError err = error (show err) 
+-- |     showError err = error (show err)
 -- |     loop interface = do
 -- |       setPrompt "$ " interface
 -- |       dog <- question "What's your dog's name?\n" interface
@@ -31,15 +31,15 @@ module Node.ReadLine.Aff
   , module RLExports
   ) where
 
-import Effect.Aff
+import Prelude
 
+import Effect.Aff (makeAff, nonCanceler)
 import Effect.Aff.Class (class MonadAff, liftAff)
-import Effect.Class (liftEffect, class MonadEffect)
+import Effect.Class (class MonadEffect, liftEffect)
 import Data.Either (Either(..))
 import Data.String (length)
 import Node.ReadLine (output, completer, terminal, historySize, noCompletion, createInterface, createConsoleInterface, Completer, Interface, InterfaceOptions) as RLExports
 import Node.ReadLine as RL
-import Prelude (Unit, discard, pure, ($), ($>), (<<<))
 
 -- | Writes a query to the output and returns the response
 question
@@ -56,7 +56,7 @@ question q interface = do
 -- | Set the prompt, this is displayed for future `prompt` calls.
 setPrompt
   :: forall m
-  . MonadEffect m
+   . MonadEffect m
   => String
   -> RL.Interface
   -> m Unit
@@ -64,23 +64,23 @@ setPrompt promptText interface =
   liftEffect $ RL.setPrompt promptText (length promptText) interface
 
 -- | Read a single line from input using the current prompt.
-prompt 
+prompt
   :: forall m
-  . MonadAff m 
+   . MonadAff m
   => RL.Interface
   -> m String
 prompt interface = do
   liftAff $ makeAff go
   where
     go handler = do
-      RL.setLineHandler interface (handler <<< Right) 
+      RL.setLineHandler interface (handler <<< Right)
       RL.prompt interface
       pure nonCanceler
 
 -- | Close the specified Interface. This should upon error, or when you're done reading input.
 close
   :: forall m
-  . MonadEffect m 
+   . MonadEffect m
   => RL.Interface
   -> m Unit
 close interface = liftEffect (RL.close interface)
